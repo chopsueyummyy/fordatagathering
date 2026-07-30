@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CourseAlign - RIASEC Assessment & SHS Data Gathering</title>
+  <meta name="description"
+    content="A research assessment tool for Senior High School students evaluating Holland's RIASEC career personality traits.">
+  <link rel="stylesheet" href="styles.css?v=1.2">
+</head>
+
+<body>
+
+  <!-- ==========================================================================
+       Header Navigation
+       ========================================================================== -->
+  <header class="app-header">
+    <div class="brand-logo" id="logoTrigger" title="Researcher Access Portal">
+      <div class="brand-name">Course<span class="brand-accent">Align</span></div>
+    </div>
+
+    <div class="header-right" style="display: flex; align-items: center; gap: 1rem;">
+      <div class="header-badge">
+        <span class="status-dot"></span>
+        <span id="headerModeLabel">SHS Research Tool</span>
+      </div>
+      <button class="btn-secondary" id="logoutBtn" style="display: none; padding: 0.4rem 1rem; font-size: 0.825rem;">
+        Exit Researcher Portal
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       Main Application Views
+       ========================================================================== -->
+  <main class="main-container">
+
+    <!-- VIEW 1: HERO LANDING -->
+    <section class="view-section active" id="viewLanding">
+      <div class="hero-wrapper">
+        <h1 class="hero-title">
+          Aligning Career Paths, Self-Esteem & <span class="gradient-text">Career Decision Self-Efficacy</span>
+        </h1>
+        <p class="hero-subtitle">
+          SHS Student Comprehensive Portal: Evaluate career compatibility (RIASEC), overall self-worth (Rosenberg Scale), 
+          and career decision self-efficacy (CDSES-SF) to support educational alignment research.
+        </p>
+        <button class="btn-primary-glow" id="startBtn">
+          <span>Start Comprehensive Evaluation</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <div class="hero-info-grid">
+          <div class="info-card">
+            <div class="info-card-icon">🎯</div>
+            <h4>Career Interests (RIASEC)</h4>
+            <p>Profiles Realistic, Investigative, Artistic, Social, Enterprising, and Conventional dimensions of your interests.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🤝</div>
+            <h4>Self-Esteem Level (RSE)</h4>
+            <p>Evaluates student self-perception, confidence, and overall feelings of self-worth.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">⚡</div>
+            <h4>Career Self-Efficacy (CDSES-SF)</h4>
+            <p>Evaluates confidence in making career choices across self-appraisal, goal selection, planning, and problem solving.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: DEMOGRAPHIC BACKGROUND STEP -->
+    <section class="view-section" id="viewDemographics">
+      <div class="assessment-container">
+        <h2 style="font-size: 1.6rem; margin-bottom: 0.5rem;">Respondent Background</h2>
+        <p style="margin-bottom: 2rem;">Please provide your basic academic classification before beginning the
+          assessment statements.</p>
+
+        <form id="demographicsForm">
+          <div class="form-group">
+            <label class="form-label">Assigned Respondent ID</label>
+            <div class="auto-id-display">
+              <span id="displayRespondentId">RESP-00000</span>
+              <span
+                style="font-size: 0.75rem; color: var(--accent-emerald); background: rgba(16,185,129,0.15); padding: 0.2rem 0.5rem; border-radius: 4px;">Auto-Generated</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gradeLevelSelect">Grade Level</label>
+            <select class="form-control" id="gradeLevelSelect" required>
+              <option value="" disabled selected>Select Grade Level</option>
+              <option value="Grade 11">Grade 11</option>
+              <option value="Grade 12">Grade 12</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="strandSelect">Senior High School Strand</label>
+            <select class="form-control" id="strandSelect" required>
+              <option value="" disabled selected>Select SHS Strand</option>
+              <option value="STEM">STEM (Science, Technology, Engineering & Mathematics)</option>
+              <option value="ABM">ABM (Accountancy, Business & Management)</option>
+              <option value="HUMSS">HUMSS (Humanities & Social Sciences)</option>
+              <option value="TVL">TVL (Technical-Vocational Livelihood)</option>
+              <option value="GAS">GAS (General Academic Strand)</option>
+              <option value="Arts & Design">Arts & Design Track</option>
+              <option value="Sports Track">Sports Track</option>
+            </select>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+            <button type="button" class="btn-secondary" id="cancelDemoBtn">Back</button>
+            <button type="submit" class="btn-action">Proceed to Questions</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- VIEW 3: QUESTIONNAIRE WIZARD -->
+    <section class="view-section" id="viewAssessment">
+      <div class="assessment-container">
+        <!-- Progress Bar Header -->
+        <div class="progress-header">
+          <div class="progress-info">
+            <span id="questionStepLabel">Question 1 of 24</span>
+            <span id="progressPercentLabel" style="color: var(--primary);">4%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBarFill"></div>
+          </div>
+        </div>
+
+        <!-- Question Body Card -->
+        <div class="question-card">
+          <div class="part-banner" id="partBanner">Part 1 of 3: Career Interest Assessment (RIASEC)</div>
+          <div class="part-instructions" id="partInstructions">Directions: There are no right or wrong answers. Choose Agree if it describes your interest, or Disagree if it does not.</div>
+          <h3 class="question-text" id="questionText">I like to assemble or repair mechanical equipment and tools.</h3>
+
+          <!-- Agree / Disagree Selection -->
+          <div class="likert-scale agree-disagree-scale" id="likertContainer">
+            <div class="likert-option">
+              <input type="radio" name="likertChoice" id="likertAgree" value="1">
+              <label for="likertAgree" class="likert-label agree-label">
+                <span class="val">✓</span>
+                <span class="desc">Agree</span>
+              </label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="likertChoice" id="likertDisagree" value="0">
+              <label for="likertDisagree" class="likert-label disagree-label">
+                <span class="val">✕</span>
+                <span class="desc">Disagree</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assessment Footer Nav -->
+        <div class="assessment-nav">
+          <button class="btn-secondary" id="prevQBtn" style="visibility: hidden;">Previous</button>
+          <button class="btn-action" id="nextQBtn">Next Question</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: THANK YOU / COMPLETION SCREEN -->
+    <section class="view-section" id="viewThankYou">
+      <div class="thankyou-wrapper">
+        <div class="check-icon-box">✓</div>
+        <h2 style="font-size: 2rem; margin-bottom: 0.75rem;">Thank You for Participating!</h2>
+        <p style="font-size: 1.05rem; margin-bottom: 2rem; color: var(--text-muted);">
+          Your responses have been successfully recorded and will greatly assist our research team in evaluating career
+          interest alignments for Senior High School students.
+        </p>
+        <div
+          style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 2rem;">
+          <p style="font-size: 0.875rem; color: #a5b4fc;">
+            <strong>Respondent Reference ID:</strong> <span id="thankyouId">RESP-00000</span>
+          </p>
+        </div>
+        <button class="btn-primary-glow" id="homeReturnBtn">Return to Home</button>
+      </div>
+    </section>
+
+    <!-- VIEW 5: RESEARCHER DASHBOARD -->
+    <section class="view-section" id="viewResearcher">
+      <div class="dashboard-wrapper">
+        <!-- Dashboard Top Toolbar -->
+        <div class="dash-header">
+          <div class="dash-title-group">
+            <h2>Researcher Analytics Portal</h2>
+            <p>Live response monitoring & score data processing for SHS RIASEC gathering</p>
+          </div>
+          <div class="dash-actions">
+            <button class="btn-secondary" id="clearCacheBtn" style="padding: 0.75rem 1rem; font-weight: 600; font-size: 0.85rem;" title="Clear local browser memory">
+              Clear Local Cache
+            </button>
+            <button class="btn-secondary" id="refreshDashBtn" style="padding: 0.75rem 1.25rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              Refresh Live Data
+            </button>
+            <button class="btn-export" id="exportCsvBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+              </svg>
+              Export CSV Dataset
+            </button>
+          </div>
+        </div>
+
+        <!-- Metrics Overview Grid -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-title">Total Responses</div>
+            <div class="metric-value" id="metricTotal">0</div>
+            <div class="metric-sub">✓ Valid Completed Tests</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Top RIASEC Trait</div>
+            <div class="metric-value" id="metricTopTrait" style="color: var(--secondary);">-</div>
+            <div class="metric-sub" id="metricTopTraitSub">Dominant across students</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Avg RSE Likert Score</div>
+            <div class="metric-value" id="metricAvgRseLikert" style="color: var(--accent-emerald);">-</div>
+            <div class="metric-sub">Range: 0 - 30 (Self-Esteem)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Avg RSE Guttman Score</div>
+            <div class="metric-value" id="metricAvgRseGuttman" style="color: var(--accent-amber);">-</div>
+            <div class="metric-sub">Range: 0 - 6 (Self-Esteem)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Avg CDSES Total</div>
+            <div class="metric-value" id="metricAvgCdsesTotal" style="color: var(--accent-cyan);">-</div>
+            <div class="metric-sub">Total (Range: 25 - 125)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Avg CDSES Mean</div>
+            <div class="metric-value" id="metricAvgCdsesMean" style="color: var(--accent-purple);">-</div>
+            <div class="metric-sub">Mean Rating (Range: 1 - 5)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Top Efficacy Area</div>
+            <div class="metric-value" id="metricTopCdsesSubscale" style="color: var(--accent-emerald);">-</div>
+            <div class="metric-sub">Highest confidence domain</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Most Active Strand</div>
+            <div class="metric-value" id="metricTopStrand" style="color: var(--accent-purple);">-</div>
+            <div class="metric-sub">Highest participation</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-title">Today's Submissions</div>
+            <div class="metric-value" id="metricToday" style="color: var(--text-main);">0</div>
+            <div class="metric-sub">Recorded in last 24h</div>
+          </div>
+        </div>
+
+        <!-- Visual Analytics Grid -->
+        <div class="analytics-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+          <!-- Average RIASEC Trait Scores Chart -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Average RIASEC Dimension Scores</h3>
+              <span style="font-size: 0.8rem; color: var(--text-dim);">Scale 0-7 per domain</span>
+            </div>
+            <div class="riasec-bars-container" id="riasecBarsContainer">
+              <!-- Dynamically populated bars -->
+            </div>
+          </div>
+
+          <!-- Self-Esteem Profile Distribution -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Self-Esteem Profiles (RSE)</h3>
+            </div>
+            <div id="rseDistributionContainer" style="display: flex; flex-direction: column; gap: 0.85rem;">
+              <!-- Dynamically populated RSE distributions -->
+            </div>
+          </div>
+
+          <!-- Career Self-Efficacy Level (CDSES-SF) -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Career Self-Efficacy Level (CDSES-SF)</h3>
+            </div>
+            <div id="cdsesDistributionContainer" style="display: flex; flex-direction: column; gap: 0.85rem;">
+              <!-- Dynamically populated CDSES distributions -->
+            </div>
+          </div>
+
+          <!-- Strand Distribution Breakdown -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Strand Participation</h3>
+            </div>
+            <div id="strandDistributionContainer" style="display: flex; flex-direction: column; gap: 0.85rem;">
+              <!-- Dynamically populated strand counts -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Searchable Respondents Table -->
+        <div class="table-card">
+          <div class="table-toolbar">
+            <input type="text" class="form-control search-input" id="searchTableInput"
+              placeholder="🔍 Search by Respondent ID...">
+            <select class="form-control filter-select" id="filterStrandSelect">
+              <option value="ALL">All Strands</option>
+              <option value="STEM">STEM</option>
+              <option value="ABM">ABM</option>
+              <option value="HUMSS">HUMSS</option>
+              <option value="TVL">TVL</option>
+              <option value="GAS">GAS</option>
+              <option value="Arts & Design">Arts & Design</option>
+              <option value="Sports Track">Sports Track</option>
+            </select>
+            <select class="form-control filter-select" id="filterGradeSelect">
+              <option value="ALL">All Grade Levels</option>
+              <option value="Grade 11">Grade 11</option>
+              <option value="Grade 12">Grade 12</option>
+            </select>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Respondent ID</th>
+                  <th>Grade</th>
+                  <th>Strand</th>
+                  <th>Dominant Code</th>
+                  <th>RSE (Likert/Guttman)</th>
+                  <th>Self-Esteem Level</th>
+                  <th>CDSES Total (Avg)</th>
+                  <th>Self-Efficacy Level</th>
+                  <th>Submitted Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="respondentsTbody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       MODALS
+       ========================================================================== -->
+
+  <!-- MODAL 1: INFORMED CONSENT -->
+  <div class="modal-overlay" id="modalConsent">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-icon-badge">📋</div>
+        <h3 class="modal-title">Informed Consent Agreement</h3>
+      </div>
+      <div class="modal-body">
+        <p>Before proceeding to the RIASEC career interest assessment, please read and confirm your voluntary
+          participation in this data-gathering study.</p>
+
+        <div class="consent-box">
+          <p><strong>Research Purpose:</strong> This assessment evaluates vocational interest patterns among Senior High
+            School students using Holland's RIASEC framework (Realistic, Investigative, Artistic, Social, Enterprising,
+            Conventional).</p>
+          <br>
+          <p><strong>Voluntary Participation:</strong> Your participation is completely voluntary. You are free to
+            decline or withdraw at any step without penalty.</p>
+          <br>
+          <p><strong>Data Privacy & Confidentiality:</strong> No sensitive personal identifiers (such as full names or
+            addresses) will be collected. Your answers are linked strictly to an auto-generated Respondent Reference ID.
+          </p>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" id="declineConsentBtn">Decline</button>
+        <button class="btn-action" id="agreeConsentBtn">I Agree & Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: RESEARCHER LOGIN -->
+  <div class="modal-overlay" id="modalResearcherLogin">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-icon-badge" style="background: rgba(6,182,212,0.15); color: var(--secondary);">🔐</div>
+        <h3 class="modal-title">Researcher Portal Login</h3>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 1rem;">Access the administrative analytics panel and dataset exporter.</p>
+        <form id="researcherLoginForm">
+          <div class="form-group">
+            <label class="form-label" for="researcherUser">Username</label>
+            <input type="text" class="form-control" id="researcherUser" value="admin" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="researcherPass">Password</label>
+            <input type="password" class="form-control" id="researcherPass" value="admin123" required>
+            <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem; display: block;">
+              💡 Demo Credentials: <code>admin</code> / <code>admin123</code>
+            </span>
+          </div>
+          <div id="loginErrorMsg"
+            style="color: var(--accent-rose); font-size: 0.85rem; display: none; margin-bottom: 1rem;">
+            Invalid username or password. Please try again.
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="closeLoginModalBtn">Cancel</button>
+            <button type="submit" class="btn-action">Authenticate</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: VIEW COMPUTED SCORES (RESEARCHER DETAIL INSPECTOR) -->
+  <div class="modal-overlay" id="modalScoresDetail">
+    <div class="modal-card" style="max-width: 620px;">
+      <div class="modal-header">
+        <div class="modal-icon-badge" style="background: rgba(139,92,246,0.15); color: var(--accent-purple);">📊</div>
+        <div>
+          <h3 class="modal-title" id="inspectorId">Respondent RESP-00000</h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);" id="inspectorMeta">Grade 11 • STEM • Submitted
+            2026-07-21</span>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+          <div>
+            <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+              Computed Dominant Code</h4>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--primary);" id="inspectorCode">RIA</div>
+          </div>
+          <div>
+            <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+              RSE Likert Score</h4>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--accent-emerald);" id="inspectorRseLikert">0 <span style="font-size: 1rem; color: var(--text-dim);">/30</span></div>
+          </div>
+          <div>
+            <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+              RSE Guttman Score</h4>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--accent-amber);" id="inspectorRseGuttman">0 <span style="font-size: 1rem; color: var(--text-dim);">/6</span></div>
+          </div>
+          <div>
+            <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+              CDSES Total Score</h4>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--accent-cyan);" id="inspectorCdsesTotal">0 <span style="font-size: 1rem; color: var(--text-dim);">/125</span></div>
+          </div>
+        </div>
+
+        <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem;">6-Trait Raw Scores (Range: 0 - 7)</h4>
+        <div class="score-grid" id="inspectorScoreGrid">
+          <!-- Score boxes populated via JS -->
+        </div>
+
+        <h4 style="font-size: 0.95rem; margin-top: 1.25rem; margin-bottom: 0.5rem;">Self-Esteem Profile (RSE)</h4>
+        <div style="background: rgba(15,23,42,0.6); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.875rem; margin-bottom: 1.25rem;" id="inspectorRseInterpretation">
+          Loading self-esteem interpretation...
+        </div>
+
+        <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem;">Career Decision Self-Efficacy Profile (CDSES-SF)</h4>
+        <div style="display: flex; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+          <div>
+            <h5 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+              Self-Appraisal (SA)</h5>
+            <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent-rose);" id="inspectorCdsesSa">0 <span style="font-size: 0.75rem; color: var(--text-dim);">/25</span></div>
+          </div>
+          <div>
+            <h5 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+              Occupational Info (OI)</h5>
+            <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent-amber);" id="inspectorCdsesOi">0 <span style="font-size: 0.75rem; color: var(--text-dim);">/25</span></div>
+          </div>
+          <div>
+            <h5 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+              Goal Selection (GS)</h5>
+            <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent-emerald);" id="inspectorCdsesGs">0 <span style="font-size: 0.75rem; color: var(--text-dim);">/25</span></div>
+          </div>
+          <div>
+            <h5 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+              Planning (PL)</h5>
+            <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent-cyan);" id="inspectorCdsesPl">0 <span style="font-size: 0.75rem; color: var(--text-dim);">/25</span></div>
+          </div>
+          <div>
+            <h5 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+              Problem Solving (PS)</h5>
+            <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent-purple);" id="inspectorCdsesPs">0 <span style="font-size: 0.75rem; color: var(--text-dim);">/25</span></div>
+          </div>
+        </div>
+        <div style="background: rgba(15,23,42,0.6); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.875rem; margin-bottom: 1.25rem;" id="inspectorCdsesInterpretation">
+          Loading self-efficacy interpretation...
+        </div>
+
+        <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem;">Recommended Alignment Profile</h4>
+        <div
+          style="background: rgba(15,23,42,0.6); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.875rem;"
+          id="inspectorAlignment">
+          Loading recommendation breakdown...
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" id="closeScoreModalBtn">Close Inspector</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script src="app.js?v=1.2"></script>
+</body>
+
+</html>
