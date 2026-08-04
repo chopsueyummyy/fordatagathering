@@ -155,6 +155,7 @@
   const nextQBtn = document.getElementById('nextQBtn');
   const thankyouId = document.getElementById('thankyouId');
   const homeReturnBtn = document.getElementById('homeReturnBtn');
+  const exitAssessmentBtn = document.getElementById('exitAssessmentBtn');
 
   // Modals
   const modalConsent = document.getElementById('modalConsent');
@@ -366,16 +367,17 @@
       }
     });
 
-    // Wizard Next & Prev Buttons
+    // Wizard Next, Prev & Exit Buttons
     prevQBtn.addEventListener('click', () => {
       if (currentQuestionIndex > 0) {
         currentQuestionIndex--;
         renderQuestionStep();
-      } else {
-        // Go back to demographics
-        if (confirm("Are you sure you want to go back? Your current answers will be reset.")) {
-          switchView('demographics');
-        }
+      }
+    });
+
+    exitAssessmentBtn.addEventListener('click', () => {
+      if (confirm("Are you sure you want to exit the assessment? Your current answers will be reset.")) {
+        switchView('demographics');
       }
     });
 
@@ -666,12 +668,8 @@
     });
 
     // Navigation buttons visibility & labels
-    prevQBtn.style.visibility = 'visible';
-    if (currentQuestionIndex === 0) {
-      prevQBtn.textContent = 'Back to Info';
-    } else {
-      prevQBtn.textContent = 'Previous';
-    }
+    prevQBtn.style.visibility = currentQuestionIndex === 0 ? 'hidden' : 'visible';
+    prevQBtn.textContent = 'Previous';
     nextQBtn.textContent = currentQuestionIndex === totalQ - 1 ? 'Submit Assessment' : 'Next Question';
   }
 
