@@ -371,13 +371,18 @@
       if (currentQuestionIndex > 0) {
         currentQuestionIndex--;
         renderQuestionStep();
+      } else {
+        // Go back to demographics
+        if (confirm("Are you sure you want to go back? Your current answers will be reset.")) {
+          switchView('demographics');
+        }
       }
     });
 
     nextQBtn.addEventListener('click', () => {
       const currentQId = QUESTION_BANK[currentQuestionIndex].id;
       if (currentStudent.answers[currentQId] === undefined) {
-        alert('Please select Agree or Disagree before proceeding to the next statement.');
+        alert('Please select an option before proceeding to the next statement.');
         return;
       }
 
@@ -660,8 +665,13 @@
       }
     });
 
-    // Navigation buttons visibility
-    prevQBtn.style.visibility = currentQuestionIndex === 0 ? 'hidden' : 'visible';
+    // Navigation buttons visibility & labels
+    prevQBtn.style.visibility = 'visible';
+    if (currentQuestionIndex === 0) {
+      prevQBtn.textContent = 'Back to Info';
+    } else {
+      prevQBtn.textContent = 'Previous';
+    }
     nextQBtn.textContent = currentQuestionIndex === totalQ - 1 ? 'Submit Assessment' : 'Next Question';
   }
 
