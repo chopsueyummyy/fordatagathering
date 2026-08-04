@@ -17,10 +17,10 @@ CREATE TABLE IF NOT EXISTS `admins` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Insert default admin account (Username: admin | Password: admin123)
+-- Insert default admin account (Username: admin | Password: admin12345)
 INSERT INTO `admins` (`username`, `password_hash`) VALUES
-('admin', '$2y$10$e0MYzXyjpJS7Pd0RVvHwHe1g.n.Jv0HvhL4N/O9c41EaQnK5bW4K2')
-ON DUPLICATE KEY UPDATE `username`=`username`;
+('admin', '$2y$10$UEU.MHk16zO9NzQ5SXz9dOBlFov3HNC1DsHxeR5Zn/WA0sTfSFXie')
+ON DUPLICATE KEY UPDATE `password_hash`=VALUES(`password_hash`);
 
 -- ----------------------------------------------------------------------------
 -- 2. RIASEC Questionnaire Table

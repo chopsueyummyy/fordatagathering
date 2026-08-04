@@ -422,8 +422,8 @@
       .then(data => {
         if (data && data.success) {
           grantResearcherAccess();
-        } else if (user === 'admin' && pass === 'admin123') {
-          // Offline demo credential fallback
+        } else if (user === 'admin' && pass === 'admin12345') {
+          // Offline credential fallback
           grantResearcherAccess();
         } else {
           loginErrorMsg.style.display = 'block';
@@ -431,7 +431,7 @@
       })
       .catch(() => {
         // Offline fallback check
-        if (user === 'admin' && pass === 'admin123') {
+        if (user === 'admin' && pass === 'admin12345') {
           grantResearcherAccess();
         } else {
           loginErrorMsg.style.display = 'block';
