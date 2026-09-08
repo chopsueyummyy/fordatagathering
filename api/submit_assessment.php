@@ -10,7 +10,7 @@ require_once __DIR__ . '/../config/db.php';
 $rawInput = file_get_contents('php://input');
 $data = json_decode($rawInput, true);
 
-if (!$data) {
+if (!$data || !is_array($data)) {
     jsonResponse(false, null, 'Invalid JSON payload received', 400);
 }
 
@@ -19,8 +19,19 @@ $gradeLevel = trim($data['grade_level'] ?? '');
 $strand = trim($data['strand'] ?? '');
 $answers = $data['answers'] ?? [];
 
-if (empty($respondentId) || empty($gradeLevel) || empty($strand) || empty($answers)) {
+$validGrades = ['Grade 11', 'Grade 12'];
+$validStrands = ['STEM', 'ABM', 'HUMSS', 'TVL', 'GAS', 'Arts & Design', 'Sports Track'];
+
+if (empty($respondentId) || empty($gradeLevel) || empty($strand) || !is_array($answers) || empty($answers)) {
     jsonResponse(false, null, 'Missing required assessment demographic or answer fields', 400);
+}
+
+if (!in_array($gradeLevel, $validGrades, true) || !in_array($strand, $validStrands, true)) {
+    jsonResponse(false, null, 'Invalid grade level or strand selection', 400);
+}
+
+if (!preg_match('/^RESP-[A-Za-z0-9_-]{3,20}$/', $respondentId)) {
+    jsonResponse(false, null, 'Invalid respondent ID format', 400);
 }
 
 try {
@@ -227,5 +238,7 @@ try {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
-    jsonResponse(false, null, 'Failed to process assessment submission: ' . $e->getMessage(), 500);
+    error_log("Submit Assessment Error: " . $e->getMessage());
+    jsonResponse(false, null, 'Failed to process assessment submission', 500);
 }
+

@@ -255,7 +255,15 @@
   function loadDataset() {
     // Query live responses from PHP MySQL Backend (coursealigngd_db)
     fetch('api/get_dashboard_metrics.php')
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 401) {
+          isResearcherLoggedIn = false;
+          logoutBtn.style.display = 'none';
+          headerModeLabel.textContent = 'SHS Research Tool';
+          return null;
+        }
+        return res.json();
+      })
       .then(data => {
         if (data && data.success && data.data && Array.isArray(data.data.respondents)) {
           responsesDataset = data.data.respondents;

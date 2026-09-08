@@ -4,7 +4,6 @@
    Verifies admin credentials and establishes a PHP session.
    ============================================================================ */
 
-session_start();
 require_once __DIR__ . '/../config/db.php';
 
 $rawInput = file_get_contents('php://input');
@@ -23,6 +22,7 @@ try {
     $admin = $stmt->fetch();
 
     if ($admin && password_verify($password, $admin['password_hash'])) {
+        session_regenerate_id(true);
         $_SESSION['admin_logged_in'] = true;
         $_SESSION['admin_username'] = $admin['username'];
 
@@ -33,5 +33,7 @@ try {
         jsonResponse(false, null, 'Invalid username or password', 401);
     }
 } catch (Exception $e) {
-    jsonResponse(false, null, 'Authentication error: ' . $e->getMessage(), 500);
+    error_log("Login Exception: " . $e->getMessage());
+    jsonResponse(false, null, 'Authentication error encountered', 500);
 }
+

@@ -6,7 +6,11 @@
 
 require_once __DIR__ . '/../config/db.php';
 
+// Enforce admin authentication guard
+requireAdminAuth();
+
 try {
+
     // 1. Fetch All Respondents with Calculated Results
     $sql = "SELECT 
                 r.respondent_id AS id,
