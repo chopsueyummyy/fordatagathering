@@ -6,17 +6,17 @@
 
 // 1. Secure Session Cookie Configuration
 if (session_status() === PHP_SESSION_NONE) {
-    $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || ($_SERVER['SERVER_PORT'] ?? 80) == 443;
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
         'domain' => '',
-        'secure' => $isSecure,
+        'secure' => true,
         'httponly' => true,
         'samesite' => 'Strict'
     ]);
     session_start();
 }
+
 
 // 2. Controlled CORS Headers
 $allowedOrigins = [

@@ -17,10 +17,8 @@ CREATE TABLE IF NOT EXISTS `admins` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Insert default admin account (Username: admin | Password: admin12345)
-INSERT INTO `admins` (`username`, `password_hash`) VALUES
-('admin', '$2y$10$UEU.MHk16zO9NzQ5SXz9dOBlFov3HNC1DsHxeR5Zn/WA0sTfSFXie')
-ON DUPLICATE KEY UPDATE `password_hash`=VALUES(`password_hash`);
+-- Note: Admin account should be inserted upon post-deployment setup via SQL/phpMyAdmin:
+-- INSERT INTO `admins` (`username`, `password_hash`) VALUES ('admin', 'YOUR_HASHED_PASSWORD');
 
 -- ----------------------------------------------------------------------------
 -- 2. RIASEC Questionnaire Table
