@@ -82,7 +82,7 @@
 
         <form id="demographicsForm">
           <div class="form-group">
-            <label class="form-label">Assigned Respondent ID</label>
+            <div class="form-label" style="font-weight: 600; margin-bottom: 0.5rem;">Assigned Respondent ID</div>
             <div class="auto-id-display">
               <span id="displayRespondentId">RESP-00000</span>
               <span
@@ -320,8 +320,8 @@
         <div class="table-card">
           <div class="table-toolbar">
             <input type="text" class="form-control search-input" id="searchTableInput"
-              placeholder="🔍 Search by Respondent ID...">
-            <select class="form-control filter-select" id="filterStrandSelect">
+              aria-label="Search by Respondent ID" placeholder="🔍 Search by Respondent ID...">
+            <select class="form-control filter-select" id="filterStrandSelect" aria-label="Filter by SHS Strand">
               <option value="ALL">All Strands</option>
               <option value="STEM">STEM</option>
               <option value="ABM">ABM</option>
@@ -331,7 +331,7 @@
               <option value="Arts & Design">Arts & Design</option>
               <option value="Sports Track">Sports Track</option>
             </select>
-            <select class="form-control filter-select" id="filterGradeSelect">
+            <select class="form-control filter-select" id="filterGradeSelect" aria-label="Filter by Grade Level">
               <option value="ALL">All Grade Levels</option>
               <option value="Grade 11">Grade 11</option>
               <option value="Grade 12">Grade 12</option>

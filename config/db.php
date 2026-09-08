@@ -6,16 +6,17 @@
 
 // 1. Secure Session Cookie Configuration
 if (session_status() === PHP_SESSION_NONE) {
-    session_set_cookie_params([
-        'lifetime' => 0,
-        'path' => '/',
-        'domain' => '',
-        'secure' => true,
-        'httponly' => true,
-        'samesite' => 'Strict'
+    ini_set('session.cookie_secure', '1');
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.cookie_samesite', 'Strict');
+    session_set_cookie_params(0, '/', '', true, true);
+    session_start([
+        'cookie_secure' => true,
+        'cookie_httponly' => true,
+        'cookie_samesite' => 'Strict'
     ]);
-    session_start();
 }
+
 
 
 // 2. Controlled CORS Headers
